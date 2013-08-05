@@ -6,7 +6,16 @@ $KwDb = JfKeywordManagement::get_db_instance();
 $table = $KwDb->get_keyword_table();
 $term = $_GET['term'];
 
-$sql = "select keyword, priority from $table where status = '1' and keyword like '%$term%' limit 0, 1000";
+$terms = explode(' ', $term);
+
+$sql = "select keyword, priority from $table where status = '1' and ( ";
+
+$extra = array();
+foreach($terms as $t){
+	$extra[] = "keyword like '%$t%'";
+}
+			
+$sql .= implode(' or ', $extra) . ' ) limit 0, 1000';
 
 $keywords = $KwDb->db->get_results($sql);
 

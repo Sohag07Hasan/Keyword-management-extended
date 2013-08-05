@@ -1,5 +1,7 @@
 jQuery(function($) {
-        var cache = {};
+        
+		var cache = {};
+        
         $( "#unique_keyword" ).autocomplete({
             minLength: 1,
             source: function( request, response ) {
@@ -47,8 +49,27 @@ jQuery(function($) {
             },
             select: function(event, ui) { 
                 var exploded = ui.item.label.split(' ~ ');
-                var title = exploded[0];
+                var title = exploded[0];                
+                var curr_title = $("#title").val();
+                var prev_title = $('#previous_keyword_keyword').val();
+                
+                //now setting the new keywords
+                $('#previous_keyword_keyword').val(title);
+                
+                if(curr_title.length > 2){
+                	
+                	var prev_exploded = prev_title.split(' ');
+                	
+                	for(k=0; k<prev_exploded.length; k++){
+                		//alert(prev_exploded[k])
+                		curr_title = curr_title.replace(prev_exploded[k], '');
+                	}
+                	
+                	title += ' ' + curr_title;
+                }
+                                
                 $("#title").val(title);
+                
             }
         });
     });
