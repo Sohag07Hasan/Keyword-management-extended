@@ -100,7 +100,7 @@ class JfKeywordManagement{
 		
 		
 		// list table's bulk action
-		if($_REQUEST['keyword_table_bulk_action'] == 'y'){
+		if($_REQUEST['keyword_table_bulk_action'] == 'y' || ($_REQUEST['page'] == 'keyword_manager' && $_REQUEST['keyword_id'] > 0)){
 			
 			$sendback = remove_query_arg( array('deleted', 'keyword_id', 'keyword_table_bulk_action'), wp_get_referer() );
 						
@@ -121,7 +121,7 @@ class JfKeywordManagement{
 			
 			$sendback = remove_query_arg( array('action', 'action2', '_wp_http_referer', '_wpnonce'), $sendback );
 			if(!empty($_REQUEST['s'])){
-				$sendback = add_query_arg( 's', $_REQUEST['s'], $sendback );
+				$sendback = add_query_arg( 's', urlencode($_REQUEST['s']), $sendback );
 			}
 			
 			return self::do_redirect($sendback);
