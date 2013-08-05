@@ -42,8 +42,14 @@ class JfKeywordUsing{
 		wp_register_script('keywords_auto_complete_js', self::get_url('asset/autocompleteui/jquery-ui-1.10.3.custom.min.js'), array('jquery'));
 		wp_enqueue_script('keywords_auto_complete_js');
 		
+		//controller script
+		wp_register_script('keywords_auto_complete_controller_js', self::get_url('js/controller.js'), array('jquery'));
+		wp_enqueue_script('keywords_auto_complete_controller_js');
+		
 		wp_register_style('keywords_auto_complete_css', self::get_url('asset/autocompleteui/jquery-ui-1.10.3.custom.min.css'));
 		wp_enqueue_style('keywords_auto_complete_css');
+		
+		
 	}
 	
 	
