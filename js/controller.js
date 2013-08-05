@@ -10,7 +10,7 @@ jQuery(function($) {
                     return;
                 }
  
-                $.getJSON( "http://localhost/wordpress/wp-content/themes/jf/includes/kwAjax.php", request, function( data, status, xhr ) {
+                $.getJSON( AjaxAutoComplete.ajax_url, request, function( data, status, xhr ) {
                     var text = [];
                     var numbers = [];
                     var reA = /[^a-zA-Z]/g;

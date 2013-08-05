@@ -115,4 +115,5 @@ class JfKeywordDb{
 			$this->db->query($s);
 		}
 	}
+		
 }
