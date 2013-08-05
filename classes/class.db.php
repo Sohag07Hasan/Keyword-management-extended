@@ -133,5 +133,21 @@ class JfKeywordDb{
 	function keyword_exists($keyword){
 		return $this->db->get_var("select id from $this->keyword where keyword like '$keyword'");
 	}
+	
+	
+	//mark a keyword as used when used
+	function mark_as_used($keyword, $post_id){
+		$id = $this->keyword_exists($keyword);
+		$this->clear_post_id($post_id);
+
+		$this->db->update($this->keyword, array('status' => 2, 'post_id' => $post_id), array('ID' => $id), array('%d', '%d'), array('%d'));
+		update_post_meta($post_id, '_keyword_id', $id);
+	}
+	
+	
+	//clear the post_id
+	function clear_post_id($post_id){
+		$this->db->update($this->keyword, array('post_id'=>'', 'status' => 1), array('post_id'=>$post_id), array('%s', '%d'), array('%d'));
+	}
 		
 }

@@ -10,6 +10,8 @@ class JfKeywordUsing{
 	static function init(){
 		add_action('add_meta_boxes', array(get_class(), 'add_new_meta_boxes'));
 		add_action('admin_enqueue_scripts', array(get_class() , 'admin_enqueue_scripts'));
+		
+		add_action('save_post', array(get_class(), 'attach_the_keyword_with_post'), 10, 2);
 	}
 	
 	
@@ -57,5 +59,17 @@ class JfKeywordUsing{
 	//get the url of the scripts
 	static function get_url($script = ''){
 		return JFKEYWORDMANAGEMENT_URL . $script;
+	}
+	
+	
+	//save the keyword with post
+	static function attach_the_keyword_with_post($post_id, $post){
+		if(!wp_is_post_revision( $post_id )){
+			if(isset($_POST['keyword_keyword'])){
+				update_post_meta($post_id, '_keyword_keyword', $_POST['keyword_keyword']);
+				$KwDb = JfKeywordManagement::get_db_instance();
+				$KwDb->mark_as_used($_POST['keyword_keyword'], $post_id);
+			}
+		}
 	}
 }
