@@ -9,6 +9,8 @@ class JfKeywordDb{
 	private $keyword_meta;
 	public $db;
 	
+	public $is_import = false;
+	
 	//constructor
 	function __construct(){
 		global $wpdb;
@@ -29,7 +31,9 @@ class JfKeywordDb{
 			status tinyint not null default 1,
 			primary key(ID),
 			unique(keyword)
-		)";
+		)"; //unique(keyword) making problem
+		
+		
 		
 		$sql[] = "create table if not exists $this->keyword_meta(
 			meta_id bigint not null auto_increment,
@@ -53,7 +57,15 @@ class JfKeywordDb{
 		
 		extract($posted, EXTR_SKIP);
 		
-		//var_dump($keyword); exit;
+		
+		if($this->is_import){
+			$exists = $this->keyword_exists($keyword);
+			if($exists){
+				$posted['id'] = $exists;
+				return $this->update_keyword($posted);
+			}
+		}
+		
 		
 		$inserted = $this->db->insert($this->keyword, array('keyword' => $keyword, 'priority' => $priority), array('%s', '%d'));
 		
@@ -114,6 +126,12 @@ class JfKeywordDb{
 		foreach($sql as $s){
 			$this->db->query($s);
 		}
+	}
+	
+	
+	//keyword exists
+	function keyword_exists($keyword){
+		return $this->db->get_var("select id from $this->keyword where keyword like '$keyword'");
 	}
 		
 }

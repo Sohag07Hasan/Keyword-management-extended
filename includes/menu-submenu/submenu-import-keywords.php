@@ -7,26 +7,33 @@
 		if($info['extension'] == 'csv'){		
 			$csv = self::get_csv_parser();
 			$csv->delimiter = ',';
+			
+			//making the first row independent
+			$csv->heading = false;
+					
 			$csv->parse($_FILES['csv_keywords']['tmp_name']);
 			
 			$KwDb = self::get_db_instance();
+			$KwDb->is_import = true;
 			
 			$imported = 0;
 			$skipped = 0;
 			
 			foreach($csv->data as $key => $row){
-				
+				if($key == 0) continue;
 				//var_dump($row); continue;
 				
-				if(empty($row['Keyword'])){
+				if(empty($row[0])){
 					$skipped ++;
 					continue;
 				}
 				
 				$data = array(
-					'keyword' => trim($row['Keyword']),
-					'priority' => trim($row['Priority'])			
+					'keyword' => trim($row[0]),
+					'priority' => trim($row[1])			
 				);
+				
+				//var_dump($data);
 				
 				if($KwDb->create_keyword($data)){
 					$imported ++;

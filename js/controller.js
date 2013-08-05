@@ -65,6 +65,9 @@ jQuery(function($) {
                 		curr_title = curr_title.replace(prev_exploded[k], '');
                 	}
                 	
+                	//removing extra white spaces
+                	curr_title = curr_title.replace(/\s\s+/g, '');
+                	
                 	title += ' ' + curr_title;
                 }
                                 
